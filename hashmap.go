@@ -1,5 +1,7 @@
 package toyhashmap
 
+import "iter"
+
 func fnv1a32(data string) uint32 {
 	bb := []byte(data)
 
@@ -116,6 +118,18 @@ func (h *HashMap[V]) Get(key string) (value V, ok bool) {
 	}
 
 	return zero, false
+}
+
+func (h *HashMap[V]) Iter() iter.Seq2[string, V] {
+	return func(yield func(string, V) bool) {
+		for _, b := range h.buckets {
+			for _, e := range b.entries {
+				if !yield(e.key, e.value) {
+					return
+				}
+			}
+		}
+	}
 }
 
 func (h *HashMap[V]) bucketIndex(key string) uint32 {

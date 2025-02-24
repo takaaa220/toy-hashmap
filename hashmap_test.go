@@ -11,6 +11,8 @@ func TestPutAndGet(t *testing.T) {
 	hm.Put("key1", 10)
 	hm.Put("key2", 20)
 	hm.Put("key3", 30)
+	hm.Put("key4", 40)
+	hm.Put("key5", 50)
 
 	if val, ok := hm.Get("key1"); !ok || val != 10 {
 		t.Errorf("Expected 10, got %v", val)
@@ -24,6 +26,10 @@ func TestPutAndGet(t *testing.T) {
 
 	if _, ok := hm.Get("unknown"); ok {
 		t.Errorf("Expected Get() to return false for missing key")
+	}
+
+	for k, v := range hm.Iter() {
+		t.Logf("key: %s, value: %d", k, v)
 	}
 }
 
